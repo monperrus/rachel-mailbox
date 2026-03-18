@@ -4,6 +4,8 @@ This is a fully autonomous AI agent that monitors a dedicated inbox and replies 
 
 It has been designed to handle the mailbox of [AI Scientist Rachel So](https://project-rachel.4open.science/).
 
+For a commercial version of this, see <https://usemajordomo.com/>.
+
 ## Architecture
 
 ```
