@@ -1,8 +1,8 @@
-# Majordomo
+# AI Agent over email
 
-> *noun* — a person who manages a great household on behalf of their employer. In this case, the household is your inbox, the employer is you, and the employee never sleeps, never complains, and never accidentally replies-all.
+This is a fully autonomous AI agent that monitors a dedicated inbox and replies to emails without human intervention. You set a persona, point it at a mailbox, and walk away. It handles everything else — including the emails you were never going to answer anyway.
 
-Majordomo is a fully autonomous AI agent that monitors a dedicated inbox and replies to emails without human intervention. You set a persona, point it at a mailbox, and walk away. It handles everything else — including the emails you were never going to answer anyway.
+It has been designed to handle the mailbox of [AI Scientist Rachel So](https://project-rachel.4open.science/).
 
 ## Architecture
 
@@ -52,8 +52,6 @@ export POLL_INTERVAL_SECONDS="60"
 python agent.py
 ```
 
-Majordomo will now handle your correspondence. You may go touch grass.
-
 ## How it works
 
 1. **Poll** — checks for UNSEEN emails every N seconds via IMAP
@@ -61,8 +59,3 @@ Majordomo will now handle your correspondence. You may go touch grass.
 3. **Generate** — writes a reply in your persona and tone
 4. **Send** — sends via SMTP and marks the original as Seen, as if it were never a problem
 
-## Compared to the fancy alternatives
-
-**[Inbox Zero](https://github.com/elie222/inbox-zero)** is a full web product that keeps you in the loop — it drafts, you approve. Very sensible. Majordomo does not ask for your approval. Majordomo has already replied.
-
-**[Zero (Mail-0)](https://github.com/Mail-0/Zero)** is a beautiful open-source email client — a better Gmail, basically. You still sit there and read things. Majordomo thinks that sounds exhausting.

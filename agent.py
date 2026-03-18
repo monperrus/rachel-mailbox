@@ -125,7 +125,7 @@ def fetch_document_context(subject: str, body: str) -> str:
         description = doc["description"]
         log.debug(f"[docs] Fetching '{description}' from {url}")
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Majordomo-Agent/1.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "AI-Agent/1.0"})
             with urllib.request.urlopen(req, timeout=10) as resp:
                 content = resp.read().decode("utf-8", errors="replace")
             log.info(f"[docs] Fetched '{description}' from {url} ({len(content)} chars)")
@@ -478,7 +478,7 @@ def run():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Majordomo autonomous email agent")
+    parser = argparse.ArgumentParser(description="autonomous email agent")
     parser.add_argument(
         "--config",
         default="config.py",
