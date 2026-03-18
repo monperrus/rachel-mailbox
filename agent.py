@@ -54,6 +54,8 @@ def load_config(path: str) -> None:
 class EmailState(TypedDict):
     uid: str
     sender: str
+    reply_to: str         # Reply-To header of the incoming email (may be empty)
+    cc: str               # CC header of the incoming email (may be empty)
     subject: str
     body: str
     message_id: str       # Message-ID of the incoming email
@@ -194,11 +196,19 @@ def send_reply(state: EmailState) -> EmailState:
         return state
 
     try:
+        # Reply-to-all: prefer Reply-To over From for the primary recipient
+        primary = state["reply_to"] or state["sender"]
+        all_recipients = [primary]
+        if state["cc"]:
+            all_recipients.append(state["cc"])
+
         msg = MIMEMultipart()
         msg["Message-ID"] = email.utils.make_msgid(domain=Config.SMTP_HOST)
         msg["Date"] = email.utils.formatdate(localtime=True)
         msg["From"] = Config.EMAIL_ADDRESS
-        msg["To"] = state["sender"]
+        msg["To"] = primary
+        if state["cc"]:
+            msg["CC"] = state["cc"]
         msg["Subject"] = f"Re: {state['subject']}"
         msg["Auto-Submitted"] = "auto-replied"
         # Thread headers: link this reply into the conversation chain
@@ -213,7 +223,7 @@ def send_reply(state: EmailState) -> EmailState:
 
         with smtplib.SMTP_SSL(Config.SMTP_HOST, Config.SMTP_PORT) as server:
             server.login(Config.EMAIL_ADDRESS, Config.EMAIL_PASSWORD)
-            server.sendmail(Config.EMAIL_ADDRESS, state["sender"], raw)
+            server.sendmail(Config.EMAIL_ADDRESS, all_recipients, raw)
 
         log.info(f"Replied to {state['sender']} re: '{state['subject']}'")
 
@@ -427,6 +437,8 @@ def fetch_unseen_emails(imap):
         emails.append({
             "uid": uid.decode(),
             "sender": decode_str(msg["From"]),
+            "reply_to": decode_str(msg["Reply-To"]),
+            "cc": decode_str(msg["CC"]),
             "subject": decode_str(msg["Subject"]),
             "body": get_body(msg),
             "message_id": incoming_msg_id,
@@ -459,6 +471,8 @@ def run():
                 state: EmailState = {
                     "uid": e["uid"],
                     "sender": e["sender"],
+                    "reply_to": e["reply_to"],
+                    "cc": e["cc"],
                     "subject": e["subject"],
                     "body": e["body"],
                     "message_id": e["message_id"],
