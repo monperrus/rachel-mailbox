@@ -178,6 +178,11 @@ BODY:
 Write a helpful, professional reply. Be concise. Do not use filler phrases like 
 "I hope this email finds you well." Sign off as: {Config.AGENT_NAME}
 
+IMPORTANT: Never state specific facts — no numbers, statistics, dates, locations, 
+names of papers, citations, or any other concrete factual claims. Discuss only 
+concepts, ideas, and general principles. If asked for specific facts, acknowledge 
+the question and suggest the recipient verify details through authoritative sources.
+
 Write only the email body, no subject line."""
     
     print(prompt)
